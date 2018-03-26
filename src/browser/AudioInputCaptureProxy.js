@@ -94,8 +94,10 @@ function start(success, error, opts) {
     format = opts[3] || format;
     audioSourceType = opts[4] || audioSourceType;
     fileUrl = opts[5] || fileUrl;
-    // the URL must be converted to a cdvfile:... URL to ensure it's readable from the outside
-    fileUrl = fileUrl.replace("filesystem:file:///", "cdvfile://localhost/");
+    if(fileUrl) {
+        // the URL must be converted to a cdvfile:... URL to ensure it's readable from the outside
+        fileUrl = fileUrl.replace("filesystem:file:///", "cdvfile://localhost/");
+    }
     console.log("AudioInputCaptureProxy: start - fileUrl: " + fileUrl);
 
     if (!audioRecorder) {
@@ -112,7 +114,9 @@ function stop(success, error, opts) {
     onStopped = success;
     onStopError = error;
     audioRecorder.stop();
-    audioRecorder.getBuffers(gotBuffers);
+    if(fileUrl) {
+        audioRecorder.getBuffers(gotBuffers);
+    }
 }
 
 // Private:
